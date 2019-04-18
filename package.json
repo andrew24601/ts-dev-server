@@ -1,0 +1,56 @@
+{
+	"name": "ts-dev-server",
+	"displayName": "ts-dev-server",
+	"description": "Dev server for TypeScript projects",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.33.0"
+	},
+	"publisher": "extremebasic",
+	"license": "BSD-3-Clause",
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"configuration": [
+			{
+				"title": "ts dev server",
+				"properties": {
+					"tsdevserver.port": {
+						"type": "number",
+						"default": 8080,
+						"description": "Port for the server to use",
+						"scope": "application"
+					},
+					"tsdevserver.host": {
+						"type": "string",
+						"default": "localhost",
+						"description": "Host for the server to use, 0.0.0.0 to be public",
+						"scope": "application"
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "yarn run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "yarn run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.12.21",
+		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28"
+	},
+	"dependencies": {
+		"lines-and-columns": "^1.1.6"
+	}
+}
