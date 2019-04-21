@@ -84,6 +84,17 @@ function getTSConfig(folder: string) {
 		const config = loadTSConfig(search);
 		if (config !== null) {
 			tsconfigCache[folder] = config;
+			if (config.compilerOptions === undefined) {
+				config.compilerOptions = {};
+			}
+			if (config.compilerOptions.baseUrl === undefined) {
+				config.compilerOptions.baseUrl = ".";
+			}
+			if (config.compilerOptions.paths === undefined) {
+				config.compilerOptions.paths = {
+					"*": ["node_modules/*"]
+				};
+			}
 			return config;
 		}
 		const parentFolder = path.dirname(search);
