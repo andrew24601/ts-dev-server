@@ -98,7 +98,7 @@ function getTSConfig(folder: string) {
 			return config;
 		}
 		const parentFolder = path.dirname(search);
-		if (parentFolder === folder) {
+		if (parentFolder === search) {
 			break;
 		}
 		search = parentFolder;
