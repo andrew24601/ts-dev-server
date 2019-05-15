@@ -2,14 +2,14 @@
 	"name": "ts-dev-server",
 	"displayName": "ts-dev-server",
 	"description": "Dev server for TypeScript projects",
-	"version": "0.0.2",
+	"version": "0.0.5",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
 	"publisher": "extremebasic",
-	"repository": { 
-		"type" : "git",
-		"url" : "https://github.com/andrew24601/ts-dev-server"
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/andrew24601/ts-dev-server"
 	},
 	"license": "BSD-3-Clause",
 	"categories": [
@@ -55,6 +55,7 @@
 		"vscode": "^1.1.28"
 	},
 	"dependencies": {
+		"jsonc-parser": "^2.1.0",
 		"lines-and-columns": "^1.1.6"
 	}
 }

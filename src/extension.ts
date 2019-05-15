@@ -5,6 +5,7 @@ import * as http from 'http';
 import * as fs from 'fs';
 import * as path from 'path';
 import { start } from 'repl';
+import { createScanner, parse } from 'jsonc-parser';
 
 const sucrase = require('./sucrase');
 
@@ -60,7 +61,7 @@ function loadTSConfig(folder: string) {
 	const configPath = path.join(folder, "tsconfig.json");
 	if (fs.existsSync(configPath)) {
 		rootFolder = folder;
-		const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+		const config = parse(fs.readFileSync(configPath, 'utf-8'));
 		if (config.compilerOptions !== undefined && config.compilerOptions.baseUrl !== undefined) {
 			config.basePath = path.join(folder, config.compilerOptions.baseUrl);
 		} else {
@@ -115,8 +116,17 @@ function findModule(tsconfig: any, moduleName: string) {
 		const modulePath = path.join(root, p.substring(0, p.length - 2), moduleName);
 		const packageJSONPath = path.join(modulePath, 'package.json');
 		if (fs.existsSync(packageJSONPath)) {
+
 			const json = JSON.parse(fs.readFileSync(packageJSONPath, 'utf-8'));
-			const module = path.join(modulePath, json.module);
+			let entryPoint = json.module;
+			if (entryPoint == null) {
+				entryPoint = json.main;
+			}
+			if (entryPoint == null) {
+				channel.appendLine(`No entry point for ${moduleName}`);
+				return null;
+			}
+			const module = path.join(modulePath, entryPoint);
 			return module;
 		}
 	}
@@ -147,6 +157,11 @@ function serveStaticFile(dataPath: string, subPath:string, response:http.ServerR
 					transforms:ext === ".tsx" ? ["typescript", "jsx"] : ["typescript"],
 					jsxPragma,
 					filePath: srcPath,
+					exportElider(name: string) {
+						if (tsconfig.ignoreExports)
+							return tsconfig.ignoreExports.indexOf(name) >= 0;
+						return false;
+					},
 					moduleResolver(name: string) {
 						if (name.startsWith(".")) {
 							const target = path.join(srcPath, "..", name);

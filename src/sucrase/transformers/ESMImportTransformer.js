@@ -97,7 +97,6 @@ var _Transformer = require('./Transformer'); var _Transformer2 = _interopRequire
         const resolvedPath = this.options.moduleResolver(modulePath, this.options.filePath || "");
         if (resolvedPath != null) {
           this.tokens.replaceToken(`"${resolvedPath}"`);
-
         }
       }
     }
@@ -305,6 +304,19 @@ var _Transformer = require('./Transformer'); var _Transformer2 = _interopRequire
       }
     }
     this.tokens.copyExpectedToken(_types.TokenType.braceR);
+
+    while (!this.tokens.matches1(_types.TokenType.string)) {
+      this.tokens.copyToken();
+    }
+
+    if (this.options.moduleResolver != null) {
+      const modulePath = this.tokens.stringValue();
+      const resolvedPath = this.options.moduleResolver(modulePath, this.options.filePath || "");
+      if (resolvedPath != null) {
+        this.tokens.replaceToken(`"${resolvedPath}"`);
+      }
+    }
+
     return true;
   }
 
@@ -315,9 +327,10 @@ var _Transformer = require('./Transformer'); var _Transformer2 = _interopRequire
    */
    shouldElideExportedName(name) {
     return (
-      this.isTypeScriptTransformEnabled &&
+      (this.options.exportElider && this.options.exportElider(name)) ||
+      (this.isTypeScriptTransformEnabled &&
       this.declarationInfo.typeDeclarations.has(name) &&
-      !this.declarationInfo.valueDeclarations.has(name)
+      !this.declarationInfo.valueDeclarations.has(name))
     );
   }
 } exports.default = ESMImportTransformer;
