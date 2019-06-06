@@ -12,3 +12,5 @@ against typescript files without needing the overhead of bundling when using a b
 Contains bodgy path resolution based on path definition in tsconfig, but could be better (and probably will be in later revisions).
 
 tsconfig ignoreExports array for excluding type only exports.
+
+OPTIONS handling for CORS

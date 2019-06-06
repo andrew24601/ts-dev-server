@@ -273,6 +273,13 @@ function updateStatusBarItem() {
 }
 
 const requestHandler:http.RequestListener = (request:http.IncomingMessage, response:http.ServerResponse) => {  
+	if (request.method == "OPTIONS") {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.writeHead(200);
+		response.end("");
+		return;
+	}
+
 	let url = request.url;
 
 	if (url === undefined || serverPaths === null) {
