@@ -54,7 +54,6 @@ function setHeaders(response:http.ServerResponse, ext: string, mtime: Date) {
 	if (mimeType !== undefined) {
 		response.setHeader("Content-Type", mimeType);
 	}
-
 }
 
 function loadTSConfig(folder: string) {
@@ -93,7 +92,7 @@ function getTSConfig(folder: string) {
 			}
 			if (config.compilerOptions.paths === undefined) {
 				config.compilerOptions.paths = {
-					"*": ["node_modules/*"]
+					"*": ["./*", "node_modules/*"]
 				};
 			}
 			return config;
@@ -108,15 +107,25 @@ function getTSConfig(folder: string) {
 	return null;
 }
 
+interface CompilerOptionsPaths {
+	[index:string]:string[]
+}
+
 function findModule(tsconfig: any, moduleName: string) {
-	const paths:string[] = tsconfig.compilerOptions.paths['*'];
+	const lookup = tsconfig.compilerOptions.paths as CompilerOptionsPaths;
+
+	const paths = lookup[moduleName] ? lookup[moduleName] : lookup['*'] ? lookup['*'] : ['.']
+
 	const root = tsconfig.basePath;
 
 	for(const p of paths) {
-		const modulePath = path.join(root, p.substring(0, p.length - 2), moduleName);
+		let modulePath = path.join(root, p);
+		if (path.basename(modulePath) === "*") {
+			modulePath = path.dirname(modulePath) + path.sep + moduleName;
+		}
+
 		const packageJSONPath = path.join(modulePath, 'package.json');
 		if (fs.existsSync(packageJSONPath)) {
-
 			const json = JSON.parse(fs.readFileSync(packageJSONPath, 'utf-8'));
 			let entryPoint = json.module;
 			if (entryPoint == null) {
