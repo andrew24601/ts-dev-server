@@ -2,7 +2,7 @@
 	"name": "ts-dev-server",
 	"displayName": "ts-dev-server",
 	"description": "Dev server for TypeScript projects",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
