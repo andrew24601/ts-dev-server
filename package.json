@@ -2,7 +2,7 @@
 	"name": "ts-dev-server",
 	"displayName": "ts-dev-server",
 	"description": "Dev server for TypeScript projects",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"engines": {
 		"vscode": "^1.33.0"
 	},
@@ -55,7 +55,7 @@
 		"vscode": "^1.1.28"
 	},
 	"dependencies": {
-		"jsonc-parser": "^2.1.0",
-		"lines-and-columns": "^1.1.6"
+		"lines-and-columns": "^1.1.6",
+		"ts-debug-reload-server": "^0.0.22"
 	}
 }
