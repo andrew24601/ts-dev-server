@@ -2,7 +2,7 @@
 
 This is the README for "ts-dev-server".
 
-### 0.0.7
+### 0.0.10
 
 Initial release of ts-dev-server
 
@@ -14,3 +14,5 @@ Contains bodgy path resolution based on path definition in tsconfig, but could b
 tsconfig ignoreExports array for excluding type only exports.
 
 OPTIONS handling for CORS
+
+HTML-free ts/tsx method running
