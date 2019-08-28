@@ -674,10 +674,10 @@ tough-cookie@~2.4.3:
     psl "^1.1.24"
     punycode "^1.4.1"
 
-ts-debug-reload-server@^0.0.26:
-  version "0.0.26"
-  resolved "https://registry.yarnpkg.com/ts-debug-reload-server/-/ts-debug-reload-server-0.0.26.tgz#d251199a244e8ede35ad20c723786d096fe6aab4"
-  integrity sha512-kqh9Ewr09lp7ePU2kcB9rvim5M+zbxryM7R12VR7tnKAOh8dd2ef1xB8Aa/biJoygkpHKuk+tIaOZIipBjIhPw==
+ts-debug-reload-server@^0.0.27:
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/ts-debug-reload-server/-/ts-debug-reload-server-0.0.27.tgz#b8d9a9a5a8805fdeb838c19a0c21e1c96ea9684b"
+  integrity sha512-WBgX6YdVbq7rD7Gh8GT2BLmYP/VEiDEtO1TptaPf4Qjv71cBjgL+nlWQ1EmnWr8X2xI0BJ3EPrbCpKjPw7UDjw==
   dependencies:
     json5 "^2.1.0"
     lines-and-columns "^1.1.6"

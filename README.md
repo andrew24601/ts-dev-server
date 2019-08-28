@@ -2,7 +2,7 @@
 
 This is the README for "ts-dev-server".
 
-### 0.0.10
+### 0.0.11
 
 Initial release of ts-dev-server
 
