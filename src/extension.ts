@@ -52,21 +52,9 @@ export function activate(context: vscode.ExtensionContext) {
 		myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
 		myStatusBarItem.command = myCommandId;
 		updateStatusBarItem();
-/*
-		context.subscriptions.push(		vscode.workspace.onDidChangeConfiguration(e=>{
-			console.log(`config was changed`);
-		}));
 
-		context.subscriptions.push(vscode.workspace.onDidSaveTextDocument(e=>{
-			console.log(`${e.fileName} was saved`);
-		}));
-
-		context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(e=>{
-			console.log(`workspace folders was changed`);
-		}));
-*/
-	context.subscriptions.push(myStatusBarItem);
-	context.subscriptions.push({
+		context.subscriptions.push(myStatusBarItem);
+		context.subscriptions.push({
 		dispose: ()=>{
 			closeServer();
 		}
