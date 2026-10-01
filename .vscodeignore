@@ -3,8 +3,7 @@
 out/test/**
 src/**
 .gitignore
-vsc-extension-quickstart.md
+eslint.config.mjs
 **/tsconfig.json
-**/tslint.json
 **/*.map
-**/*.ts
+yarn.lock
