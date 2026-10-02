@@ -1,68 +1,68 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const debugServer = require('ts-debug-reload-server');
 
-let channel : vscode.OutputChannel;
-let myStatusBarItem: vscode.StatusBarItem;
+const TOGGLE_COMMAND = 'tsdevserver.toggleServer';
+
+let channel: vscode.OutputChannel;
+let statusBarItem: vscode.StatusBarItem;
 
 function updateStatusBarItem() {
-	if (!debugServer.isRunning()) {
-		myStatusBarItem.text = 'Stopped';
+	if (debugServer.isRunning()) {
+		statusBarItem.text = '$(debug-stop) Dev Server: Running';
+		statusBarItem.tooltip = 'Click to stop the dev server';
 	} else {
-		myStatusBarItem.text = 'Running';
+		statusBarItem.text = '$(play) Dev Server: Stopped';
+		statusBarItem.tooltip = 'Click to start the dev server';
 	}
-	myStatusBarItem.show();
+	statusBarItem.show();
 }
 
 function startServer() {
-	const port = vscode.workspace.getConfiguration().get('tsdevserver.port') as number;
-	const host = vscode.workspace.getConfiguration().get('tsdevserver.host') as string;
-
-	if (vscode.workspace.workspaceFolders === undefined) {
+	const folder = vscode.workspace.workspaceFolders?.[0];
+	if (!folder) {
+		vscode.window.showWarningMessage('Open a folder to start the dev server.');
 		return;
 	}
 
-	let root = vscode.workspace.workspaceFolders[0].uri.fsPath;
+	const config = vscode.workspace.getConfiguration('tsdevserver');
+	const port = config.get<number>('port', 8080);
+	const host = config.get<string>('host', 'localhost');
 
-	debugServer.startServer(port, host, root, (msg:string)=>channel.appendLine(msg));
+	debugServer.startServer(port, host, folder.uri.fsPath, (msg: string) => channel.appendLine(msg));
 	channel.show(true);
 }
 
-function closeServer() {
-	debugServer.stopServer();
+function stopServer() {
+	if (debugServer.isRunning()) {
+		debugServer.stopServer();
+	}
 }
 
 function toggleServer() {
-	if (!debugServer.isRunning()) {
-		startServer();
+	if (debugServer.isRunning()) {
+		stopServer();
 	} else {
-		closeServer();
+		startServer();
 	}
 	updateStatusBarItem();
 }
 
 export function activate(context: vscode.ExtensionContext) {
-		channel = vscode.window.createOutputChannel("Dev Server");
+	channel = vscode.window.createOutputChannel('Dev Server');
 
-		const myCommandId = 'tsdevserver.toggleServer';
-		context.subscriptions.push(vscode.commands.registerCommand(myCommandId, toggleServer));
+	statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+	statusBarItem.command = TOGGLE_COMMAND;
+	updateStatusBarItem();
 
-		myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-		myStatusBarItem.command = myCommandId;
-		updateStatusBarItem();
-
-		context.subscriptions.push(myStatusBarItem);
-		context.subscriptions.push({
-		dispose: ()=>{
-			closeServer();
-		}
-	});
+	context.subscriptions.push(
+		channel,
+		statusBarItem,
+		vscode.commands.registerCommand(TOGGLE_COMMAND, toggleServer),
+		{ dispose: stopServer },
+	);
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {
-	console.log(`deactivate called`);
-
+	stopServer();
 }
